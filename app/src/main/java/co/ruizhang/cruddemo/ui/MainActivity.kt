@@ -1,4 +1,4 @@
-package co.ruizhang.cruddemo
+package co.ruizhang.cruddemo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
