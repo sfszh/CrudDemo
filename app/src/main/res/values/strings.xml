@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CrudDemo</string>
     <string name="end_onboarding">跳过</string>
+    <string name="useless">无用</string>
 </resources>
