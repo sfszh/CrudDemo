@@ -16,15 +16,17 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 fun Repos(
     repos: List<Repository>,
     selectRepo: (Int) -> Unit,
-    modifier : Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier) {
-        items(repos) { repo ->
-            RepoCard(
-                repo = repo,
-                onClick = { selectRepo(repo.id) },
-                modifier = modifier
-            )
+    CrudDemoTheme {
+        LazyColumn(modifier) {
+            items(repos) { repo ->
+                RepoCard(
+                    repo = repo,
+                    onClick = { selectRepo(repo.id) },
+                    modifier = modifier
+                )
+            }
         }
     }
 }
@@ -45,9 +47,7 @@ fun RepoCard(
 @Preview("Repos Preview")
 @Composable
 fun ReposPreview() {
-    CrudDemoTheme {
-        Repos(repos = Mock_Repos, selectRepo = {})
-    }
+    Repos(repos = Mock_Repos, selectRepo = {})
 }
 
 

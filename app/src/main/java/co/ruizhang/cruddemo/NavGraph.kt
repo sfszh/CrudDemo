@@ -6,10 +6,15 @@ import androidx.navigation.compose.navigate
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import co.ruizhang.cruddemo.MainDestinations.ONBOARDING_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_ROUTE
+import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID_KEY
+import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
 import co.ruizhang.cruddemo.data.Mock_Repos
 import co.ruizhang.cruddemo.ui.Onboarding
 import co.ruizhang.cruddemo.ui.RepoCard
+import co.ruizhang.cruddemo.ui.RepoDetail
+import co.ruizhang.cruddemo.ui.Repos
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 /**
@@ -25,25 +30,24 @@ object MainDestinations {
 @Composable
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = MainDestinations.ONBOARDING_ROUTE,
-){
+    startDestination: String = ONBOARDING_ROUTE,
+) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(MainDestinations.ONBOARDING_ROUTE) {
+        composable(ONBOARDING_ROUTE) {
             Onboarding {
                 navController.navigate(REPOS_ROUTE)
             }
         }
 
-        composable(MainDestinations.REPOS_ROUTE) {
-            val mockData = Mock_Repos[0]
-
-            CrudDemoTheme {
-                RepoCard(repo = mockData, onClick = {})
-            }
+        composable(REPOS_ROUTE) {
+            Repos(repos = Mock_Repos, selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
         }
 
+        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry->
+            RepoDetail(backStackEntry.arguments?.getInt("userId")!!)
+        }
     }
 }
