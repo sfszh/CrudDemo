@@ -51,6 +51,8 @@ dependencies {
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.Coroutines.android)
 
+    implementation(Libs.Hilt.hilt)
+
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.navigation)
     implementation(Libs.AndroidX.Activity.activityCompose)
@@ -65,8 +67,16 @@ dependencies {
     implementation(Libs.AndroidX.Compose.animation)
     implementation(Libs.AndroidX.Compose.iconsExtended)
     implementation(Libs.AndroidX.Compose.tooling)
+
+    implementation(Libs.AndroidX.Lifecycle.LiveDataKtx)
+    implementation(Libs.AndroidX.Lifecycle.RunTime)
+    implementation(Libs.AndroidX.Lifecycle.ViewModelKtx)
+    implementation(Libs.AndroidX.Lifecycle.Extensions)
     implementation(Libs.Accompanist.coil)
     implementation(Libs.Accompanist.insets)
+
+    implementation(Libs.Retrofit.retrofit)
+    implementation(Libs.Retrofit.gson)
 
     androidTestImplementation(Libs.AndroidX.Activity.activityCompose)
     androidTestImplementation(Libs.JUnit.junit)

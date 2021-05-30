@@ -27,9 +27,22 @@ object Libs {
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
+    object Retrofit {
+        private const val version = "2.9.0"
+        const val retrofit = "com.squareup.retrofit2:retrofit:$version"
+        const val gson = "com.squareup.retrofit2:converter-gson:$version"
+    }
+
     object JUnit {
         private const val version = "4.13"
         const val junit = "junit:junit:$version"
+    }
+
+    object Hilt {
+        const val version = "2.35"
+        const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
+        const val hilt = "com.google.dagger:hilt-android:$version"
+        const val compiler = "com.google.dagger:hilt-android-compiler:$version"
     }
 
     object AndroidX {
@@ -55,6 +68,15 @@ object Libs {
             const val uiUtil = "androidx.compose.ui:ui-util:$version"
             const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
         }
+        object Lifecycle {
+            private const val version = "2.3.1"
+            const val RunTime = "androidx.lifecycle:lifecycle-runtime:$version"
+            const val LiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
+            const val Extensions= "androidx.lifecycle:lifecycle-extensions:2.2.0"
+            const val ViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
+
+        }
+
 
         object ConstraintLayout {
             const val constraintLayoutCompose =
