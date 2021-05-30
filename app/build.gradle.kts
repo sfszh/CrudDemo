@@ -3,6 +3,8 @@ import co.ruizhang.buildsrc.Libs
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -52,6 +54,7 @@ dependencies {
     implementation(Libs.Coroutines.android)
 
     implementation(Libs.Hilt.hilt)
+    kapt(Libs.Hilt.compiler)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.navigation)
