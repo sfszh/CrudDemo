@@ -1,8 +1,8 @@
 package co.ruizhang.cruddemo
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -43,7 +43,7 @@ fun NavGraph(
         }
 
         composable(REPOS_ROUTE) {
-            Repos(repos = Mock_Repos, selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
+            Repos(vm = viewModel(), selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
         }
 
         composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry->

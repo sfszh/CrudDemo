@@ -6,26 +6,44 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import co.ruizhang.cruddemo.data.Mock_Repos
+import co.ruizhang.cruddemo.data.ReposViewModel
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun Repos(
-    repos: List<Repository>,
+    vm: ReposViewModel = viewModel(),
     selectRepo: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val repos = vm.user.observeAsState()
+    ReposUI(modifier, repos, selectRepo)
+}
+
+@Composable
+private fun ReposUI(
+    modifier: Modifier = Modifier,
+    repos: State<List<Repository>?>,
+    selectRepo: (Int) -> Unit
+) {
     CrudDemoTheme {
         LazyColumn(modifier) {
-            items(repos) { repo ->
-                RepoCard(
-                    repo = repo,
-                    onClick = { selectRepo(repo.id) },
-                    modifier = modifier
-                )
+            repos.value?.let {
+                items(it) { repo ->
+                    RepoCard(
+                        repo = repo,
+                        onClick = { selectRepo(repo.id) },
+                        modifier = modifier
+                    )
+                }
             }
         }
     }
@@ -47,7 +65,7 @@ fun RepoCard(
 @Preview("Repos Preview")
 @Composable
 fun ReposPreview() {
-    Repos(repos = Mock_Repos, selectRepo = {})
+    ReposUI(repos = remember{ mutableStateOf(Mock_Repos) }, selectRepo = {})
 }
 
 
