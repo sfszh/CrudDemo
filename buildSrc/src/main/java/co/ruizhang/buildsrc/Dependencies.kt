@@ -1,3 +1,4 @@
+
 package co.ruizhang.buildsrc
 
 object Versions {
@@ -5,7 +6,7 @@ object Versions {
 }
 
 object Libs {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-alpha14"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:7.0.0-beta03"
 
     object Accompanist {
         const val version = "0.9.0"
@@ -39,7 +40,7 @@ object Libs {
     }
 
     object Hilt {
-        const val version = "2.35"
+        const val version = "2.36"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
         const val hilt = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
@@ -71,6 +72,7 @@ object Libs {
             const val liveData = "androidx.compose.runtime:runtime-livedata:$version"
             const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
         }
+
         object Lifecycle {
             private const val version = "2.3.1"
             const val RunTime = "androidx.lifecycle:lifecycle-runtime:$version"
@@ -79,7 +81,6 @@ object Libs {
             const val ViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
 
         }
-
 
         object ConstraintLayout {
             const val constraintLayoutCompose =
