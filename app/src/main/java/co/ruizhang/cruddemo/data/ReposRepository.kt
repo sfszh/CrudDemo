@@ -4,9 +4,9 @@ interface ReposRepository {
     suspend fun getRepos(): List<Repository>
 }
 
-class ReposRepositoryImpl(private val api: API) : ReposRepository {
+class ReposRepositoryImpl(private val repoApi: RepoAPI) : ReposRepository {
     override suspend fun getRepos(): List<Repository> {
-        val apiModel = api.getRepos(username = "octocat").body() ?: emptyList()
+        val apiModel = repoApi.getRepos(username = "octocat").body() ?: emptyList()
         return apiModel.map {
             Repository(
                 id = it.id,

@@ -54,7 +54,9 @@ dependencies {
     implementation(Libs.Coroutines.android)
 
     implementation(Libs.Hilt.hilt)
+    kapt(Libs.Hilt.androidCompiler)
     kapt(Libs.Hilt.compiler)
+    kapt(Libs.Hilt.viewModel)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.navigation)

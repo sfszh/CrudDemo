@@ -20,7 +20,7 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun Repos(
-    vm: ReposViewModel = viewModel(),
+    vm: ReposViewModel,
     selectRepo: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
