@@ -12,6 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltNavGraphViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.ruizhang.cruddemo.data.Mock_Repos
 import co.ruizhang.cruddemo.ui.repos.ReposViewModel
@@ -20,7 +22,7 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun Repos(
-    vm: ReposViewModel,
+    vm: ReposViewModel = hiltViewModel(),
     selectRepo: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {

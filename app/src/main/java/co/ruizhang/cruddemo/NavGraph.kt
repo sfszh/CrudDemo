@@ -29,7 +29,6 @@ object MainDestinations {
 
 @Composable
 fun NavGraph(
-    viewModel: ReposViewModel,
     navController: NavHostController = rememberNavController(),
     startDestination: String = ONBOARDING_ROUTE,
 ) {
@@ -44,7 +43,8 @@ fun NavGraph(
         }
 
         composable(REPOS_ROUTE) {
-            Repos(vm = viewModel, selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
+
+            Repos(selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
         }
 
         composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry->

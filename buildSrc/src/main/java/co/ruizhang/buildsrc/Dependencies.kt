@@ -40,12 +40,13 @@ object Libs {
     }
 
     object Hilt {
-        const val version = "2.36"
+        private const val version = "2.36"
+        private const val miscVersion = "1.0.0-alpha03"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
         const val hilt = "com.google.dagger:hilt-android:$version"
         const val androidCompiler = "com.google.dagger:hilt-android-compiler:$version"
-        const val viewModel = "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-        const val compiler = "androidx.hilt:hilt-compiler:1.0.0-alpha03"
+        const val viewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$miscVersion"
+        const val compiler = "androidx.hilt:hilt-compiler:$miscVersion"
         const val composeNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha02"
     }
 
