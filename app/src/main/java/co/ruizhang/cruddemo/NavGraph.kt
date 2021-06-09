@@ -7,15 +7,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import co.ruizhang.cruddemo.MainDestinations.ONBOARDING_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_ROUTE
+import co.ruizhang.cruddemo.MainDestinations.REPOS_SEARCH
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID_KEY
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
-import co.ruizhang.cruddemo.data.Mock_Repos
 import co.ruizhang.cruddemo.ui.Onboarding
-import co.ruizhang.cruddemo.ui.RepoCard
 import co.ruizhang.cruddemo.ui.RepoDetail
 import co.ruizhang.cruddemo.ui.Repos
-import co.ruizhang.cruddemo.ui.repos.ReposViewModel
-import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
+import co.ruizhang.cruddemo.ui.reposearch.RepoSearch
 
 /**
  * Destinations used in the ([OwlApp]).
@@ -23,6 +21,7 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 object MainDestinations {
     const val ONBOARDING_ROUTE = "onboarding"
     const val REPOS_ROUTE = "repos"
+    const val REPOS_SEARCH = "repos_search"
     const val REPO_DETAIL_ROUTE = "repo"
     const val REPO_DETAIL_ID_KEY = "repoId"
 }
@@ -43,11 +42,20 @@ fun NavGraph(
         }
 
         composable(REPOS_ROUTE) {
-
-            Repos(selectRepo = {navController.navigate("${REPO_DETAIL_ROUTE}/$it")})
+            Repos(
+                selectRepo = { navController.navigate("${REPO_DETAIL_ROUTE}/$it") },
+                navigateToRepoSearch = {
+                    navController.navigate(
+                        REPOS_SEARCH
+                    )
+                })
         }
 
-        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry->
+        composable(REPOS_SEARCH) {
+            RepoSearch()
+        }
+
+        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry ->
             RepoDetail(backStackEntry.arguments?.getInt("userId")!!)
         }
     }

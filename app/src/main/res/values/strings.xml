@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">CrudDemo</string>
     <string name="end_onboarding">跳过</string>
+    <string name="add_repo">添加</string>
     <string name="useless">无用</string>
+    <string name="search">搜</string>
+    <string name="search_content_description">搜索</string>
+    <string name="search_label">搜索仓库</string>
 </resources>

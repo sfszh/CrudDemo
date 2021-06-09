@@ -4,6 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -11,11 +13,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltNavGraphViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import co.ruizhang.cruddemo.data.Mock_Repos
+import co.ruizhang.cruddemo.R
+import co.ruizhang.cruddemo.data.MOCK_REPOS
 import co.ruizhang.cruddemo.ui.repos.ReposViewModel
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
@@ -24,27 +26,37 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 fun Repos(
     vm: ReposViewModel = hiltViewModel(),
     selectRepo: (Int) -> Unit,
+    navigateToRepoSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val repos = vm.user.observeAsState()
-    ReposUI(modifier, repos, selectRepo)
+    ReposUI(modifier, repos, selectRepo, navigateToRepoSearch)
 }
 
 @Composable
 private fun ReposUI(
     modifier: Modifier = Modifier,
     repos: State<List<Repository>?>,
-    selectRepo: (Int) -> Unit
+    selectRepo: (Int) -> Unit,
+    navigateToRepoSearch: () -> Unit
 ) {
     CrudDemoTheme {
-        LazyColumn(modifier) {
-            repos.value?.let {
-                items(it) { repo ->
-                    RepoCard(
-                        repo = repo,
-                        onClick = { selectRepo(repo.id) },
-                        modifier = modifier
-                    )
+        Scaffold(
+            floatingActionButton = {
+                AddRepoButton {
+                    navigateToRepoSearch()
+                }
+            }
+        ) { innerPadding ->
+            LazyColumn(modifier) {
+                repos.value?.let {
+                    items(it) { repo ->
+                        RepoCard(
+                            repo = repo,
+                            onClick = { selectRepo(repo.id) },
+                            modifier = modifier
+                        )
+                    }
                 }
             }
         }
@@ -64,17 +76,27 @@ fun RepoCard(
     }
 }
 
+@Composable
+fun AddRepoButton(add: () -> Unit) {
+    FloatingActionButton(
+        onClick = add,
+    ) {
+        Text(text = stringResource(R.string.add_repo))
+    }
+}
+
+
 @Preview("Repos Preview")
 @Composable
 fun ReposPreview() {
-    ReposUI(repos = remember{ mutableStateOf(Mock_Repos) }, selectRepo = {})
+    ReposUI(repos = remember { mutableStateOf(MOCK_REPOS) }, selectRepo = {}, navigateToRepoSearch = {})
 }
 
 
 @Preview("Repo Card Preview")
 @Composable
 fun RepoCardPreview() {
-    val mockData = Mock_Repos[0]
+    val mockData = MOCK_REPOS[0]
 
     CrudDemoTheme {
         RepoCard(repo = mockData, onClick = {})
