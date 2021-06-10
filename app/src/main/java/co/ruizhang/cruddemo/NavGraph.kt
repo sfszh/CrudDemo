@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import co.ruizhang.cruddemo.MainDestinations.ONBOARDING_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_SEARCH
-import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_NAME
+import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
 import co.ruizhang.cruddemo.ui.Onboarding
 import co.ruizhang.cruddemo.ui.repodetail.RepoDetail
@@ -23,7 +23,7 @@ object MainDestinations {
     const val REPOS_ROUTE = "repos"
     const val REPOS_SEARCH = "repos_search"
     const val REPO_DETAIL_ROUTE = "repo"
-    const val REPO_DETAIL_NAME = "repo_name"
+    const val REPO_DETAIL_ID = "repo_id"
 }
 
 @Composable
@@ -59,8 +59,9 @@ fun NavGraph(
             })
         }
 
-        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_NAME}}") { backStackEntry ->
-            RepoDetail(backStackEntry.arguments?.getString(REPO_DETAIL_NAME)!!)
+        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID}}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString(REPO_DETAIL_ID)?.toInt() ?: 0
+            RepoDetail(id)
         }
     }
 }

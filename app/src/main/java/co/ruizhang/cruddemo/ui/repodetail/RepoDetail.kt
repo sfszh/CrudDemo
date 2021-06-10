@@ -17,13 +17,13 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun RepoDetail(
-    fullName: String,
+    id: Int,
     vm: RepoDetailViewModel = hiltViewModel(),
     modifier: Modifier = Modifier, // leave it for now
 ) {
     val navController = rememberNavController()
     val repo = vm.repo.observeAsState()
-    vm.get(fullName)
+    vm.get(id)
     CrudDemoTheme {
         Scaffold(
             topBar = {

@@ -6,6 +6,7 @@ import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,10 +22,16 @@ class RepoSearchViewModel @Inject constructor(
 
     fun search(query: String) {
         viewModelScope.launch {
-            searchCache = searchRepository.search(query)
-            val repos = reposRepository.getRepos()
-            val viewData = toViewData(searchCache, repos)
-            searchResult.setValue(viewData)
+            try {
+
+
+                searchCache = searchRepository.search(query)
+                val repos = reposRepository.getRepos()
+                val viewData = toViewData(searchCache, repos)
+                searchResult.setValue(viewData)
+            } catch ( e : Exception) {
+                print(e.message)
+            }
         }
     }
 
@@ -32,7 +39,10 @@ class RepoSearchViewModel @Inject constructor(
         viewModelScope.launch {
             searchCache.first { it.name == viewData.name }
             val toggledRepo = searchCache.first { it.id == viewData.id }
-            val savedRepos = if (isChecked) reposRepository.addRepos(toggledRepo) else reposRepository.removeRepos(toggledRepo)
+            val savedRepos =
+                if (isChecked) reposRepository.addRepos(toggledRepo) else reposRepository.removeRepos(
+                    toggledRepo
+                )
             val newViewData = toViewData(searchCache, savedRepos)
             searchResult.setValue(newViewData)
         }

@@ -26,7 +26,7 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 @Composable
 fun Repos(
     vm: RepoListViewModel = hiltViewModel(),
-    selectRepo: (String) -> Unit,
+    selectRepo: (Int) -> Unit,
     navigateToRepoSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -38,7 +38,7 @@ fun Repos(
 private fun ReposUI(
     modifier: Modifier = Modifier,
     repos: State<List<Repository>?>,
-    selectRepo: (String) -> Unit,
+    selectRepo: (Int) -> Unit,
     navigateToRepoSearch: () -> Unit
 ) {
     CrudDemoTheme {
@@ -59,7 +59,7 @@ private fun ReposUI(
                     items(it) { repo ->
                         RepoCard(
                             repo = repo,
-                            onClick = { selectRepo(repo.fullName) },
+                            onClick = { selectRepo(repo.id) },
                             modifier = modifier
                         )
                     }
