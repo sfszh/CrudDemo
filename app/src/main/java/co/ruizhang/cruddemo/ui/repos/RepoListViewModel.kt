@@ -9,8 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ReposViewModel @Inject constructor(private val reposRepository: ReposRepository): ViewModel() {
-    val user: LiveData<List<Repository>> = liveData {
+class RepoListViewModel @Inject constructor(private val reposRepository: ReposRepository): ViewModel() {
+    val repos: LiveData<List<Repository>> = liveData {
         val repos = reposRepository.getRepos()
         emit(repos)
     }

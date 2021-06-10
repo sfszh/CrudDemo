@@ -4,6 +4,12 @@
     <string name="add_repo">添加</string>
     <string name="useless">无用</string>
     <string name="search">搜</string>
-    <string name="search_content_description">搜索</string>
     <string name="search_label">搜索仓库</string>
+    <string name="repo_list">仓库列表</string>
+    <string name="repo_detail">仓库详情</string>
+
+<!--    content description -->
+    <string name="content_description_search">搜索</string>
+    <string name="content_description_back">返回</string>
 </resources>
+

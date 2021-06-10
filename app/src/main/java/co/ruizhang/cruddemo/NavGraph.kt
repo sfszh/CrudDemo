@@ -8,10 +8,10 @@ import androidx.navigation.compose.rememberNavController
 import co.ruizhang.cruddemo.MainDestinations.ONBOARDING_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_SEARCH
-import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID_KEY
+import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_NAME
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
 import co.ruizhang.cruddemo.ui.Onboarding
-import co.ruizhang.cruddemo.ui.RepoDetail
+import co.ruizhang.cruddemo.ui.repodetail.RepoDetail
 import co.ruizhang.cruddemo.ui.Repos
 import co.ruizhang.cruddemo.ui.reposearch.RepoSearch
 
@@ -23,7 +23,7 @@ object MainDestinations {
     const val REPOS_ROUTE = "repos"
     const val REPOS_SEARCH = "repos_search"
     const val REPO_DETAIL_ROUTE = "repo"
-    const val REPO_DETAIL_ID_KEY = "repoId"
+    const val REPO_DETAIL_NAME = "repo_name"
 }
 
 @Composable
@@ -48,15 +48,19 @@ fun NavGraph(
                     navController.navigate(
                         REPOS_SEARCH
                     )
-                })
+                }
+
+            )
         }
 
         composable(REPOS_SEARCH) {
-            RepoSearch()
+            RepoSearch(back = {
+                navController.popBackStack()
+            })
         }
 
-        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID_KEY}}") { backStackEntry ->
-            RepoDetail(backStackEntry.arguments?.getInt("userId")!!)
+        composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_NAME}}") { backStackEntry ->
+            RepoDetail(backStackEntry.arguments?.getString(REPO_DETAIL_NAME)!!)
         }
     }
 }

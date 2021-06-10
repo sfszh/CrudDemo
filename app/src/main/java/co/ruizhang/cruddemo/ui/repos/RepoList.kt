@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -18,18 +19,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.data.MOCK_REPOS
-import co.ruizhang.cruddemo.ui.repos.ReposViewModel
+import co.ruizhang.cruddemo.ui.repos.RepoListViewModel
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun Repos(
-    vm: ReposViewModel = hiltViewModel(),
-    selectRepo: (Int) -> Unit,
+    vm: RepoListViewModel = hiltViewModel(),
+    selectRepo: (String) -> Unit,
     navigateToRepoSearch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val repos = vm.user.observeAsState()
+    val repos = vm.repos.observeAsState()
     ReposUI(modifier, repos, selectRepo, navigateToRepoSearch)
 }
 
@@ -37,7 +38,7 @@ fun Repos(
 private fun ReposUI(
     modifier: Modifier = Modifier,
     repos: State<List<Repository>?>,
-    selectRepo: (Int) -> Unit,
+    selectRepo: (String) -> Unit,
     navigateToRepoSearch: () -> Unit
 ) {
     CrudDemoTheme {
@@ -46,6 +47,11 @@ private fun ReposUI(
                 AddRepoButton {
                     navigateToRepoSearch()
                 }
+            },
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = stringResource(id = R.string.repo_list)) }
+                )
             }
         ) { innerPadding ->
             LazyColumn(modifier) {
@@ -53,7 +59,7 @@ private fun ReposUI(
                     items(it) { repo ->
                         RepoCard(
                             repo = repo,
-                            onClick = { selectRepo(repo.id) },
+                            onClick = { selectRepo(repo.fullName) },
                             modifier = modifier
                         )
                     }
@@ -89,7 +95,10 @@ fun AddRepoButton(add: () -> Unit) {
 @Preview("Repos Preview")
 @Composable
 fun ReposPreview() {
-    ReposUI(repos = remember { mutableStateOf(MOCK_REPOS) }, selectRepo = {}, navigateToRepoSearch = {})
+    ReposUI(
+        repos = remember { mutableStateOf(MOCK_REPOS) },
+        selectRepo = {},
+        navigateToRepoSearch = {})
 }
 
 

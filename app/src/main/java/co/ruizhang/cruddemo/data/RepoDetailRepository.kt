@@ -3,15 +3,15 @@ package co.ruizhang.cruddemo.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface SearchRepository {
-    suspend fun search(query: String): List<Repository>
+interface RepoDetailRepository {
+    suspend fun get(fullName: String): Repository?
 }
 
-class SearchRepositoryImpl(private val repoApi: RepoAPI) : SearchRepository {
-    override suspend fun search(query: String): List<Repository> {
+class RepoDetailRepositoryImpl(private val repoApi: RepoAPI) : RepoDetailRepository {
+    override suspend fun get(fullName: String): Repository? {
         return withContext(Dispatchers.IO) {
-            repoApi.searchRepo(query).let { resp ->
-                resp.body()?.items?.map {
+            repoApi.getRepo(fullName).let { resp ->
+                resp.body()?.let {
                     Repository(
                         id = it.id,
                         name = it.name,
@@ -21,8 +21,10 @@ class SearchRepositoryImpl(private val repoApi: RepoAPI) : SearchRepository {
                         stargazersCount = it.stargazers_count,
                         forksCount = it.forks_count
                     )
-                } ?: emptyList()
+                }
+
             }
         }
     }
 }
+

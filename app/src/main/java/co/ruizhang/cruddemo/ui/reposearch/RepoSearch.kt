@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -15,14 +16,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.ruizhang.cruddemo.R
-import co.ruizhang.cruddemo.data.MOCK_REPOS
 import co.ruizhang.cruddemo.data.MOCK_SEARCH
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
 fun RepoSearch(
     modifier: Modifier = Modifier,
-    vm: RepoSearchViewModel = hiltViewModel()
+    vm: RepoSearchViewModel = hiltViewModel(),
+    back: () -> Unit,
 ) {
 
     val searchResult = vm.searchResult.observeAsState()
@@ -32,6 +33,7 @@ fun RepoSearch(
             vm.toggleBookmark(viewData, isChecked)
         },
         searchResult = searchResult,
+        back = back,
         modifier = modifier
     )
 }
@@ -41,17 +43,31 @@ private fun RepoSearchUI(
     search: (String) -> Unit,
     check: (RepoSearchViewData, Boolean) -> Unit,
     searchResult: State<List<RepoSearchViewData>?>,
+    back: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CrudDemoTheme {
         Scaffold(
             topBar = {
-                SearchBar(onSearch = {
-                    search(it)
-                })
+                TopAppBar(
+                    title = {
+                        SearchBar(onSearch = {
+                            search(it)
+                        })
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = back) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                contentDescription = stringResource(id = R.string.content_description_back)
+                            )
+                        }
+                    }
+                )
             }
         ) { innerPadding ->
             LazyColumn(modifier) {
+
                 searchResult.value?.let {
                     items(it) { viewData ->
                         RepoSearchCard(
@@ -83,7 +99,7 @@ fun SearchBar(
             leadingIcon = {
                 Icon(
                     Icons.Rounded.Search,
-                    contentDescription = stringResource(id = R.string.search_content_description)
+                    contentDescription = stringResource(id = R.string.content_description_search)
                 )
             }
         )
@@ -130,7 +146,9 @@ fun RepoSearchPreview() {
         search = {},
         check = { _, _ ->
         },
-        searchResult = remember { mutableStateOf(MOCK_SEARCH) })
+        searchResult = remember { mutableStateOf(MOCK_SEARCH) },
+        back = {}
+    )
 }
 
 @Preview("Search Bar Preview")

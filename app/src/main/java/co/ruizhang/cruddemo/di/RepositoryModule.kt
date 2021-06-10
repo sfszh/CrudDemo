@@ -1,10 +1,6 @@
 package co.ruizhang.cruddemo.di
 
-import co.ruizhang.cruddemo.data.RepoAPI
-import co.ruizhang.cruddemo.data.ReposRepository
-import co.ruizhang.cruddemo.data.ReposRepositoryImpl
-import co.ruizhang.cruddemo.data.SearchRepository
-import co.ruizhang.cruddemo.data.SearchRepositoryImpl
+import co.ruizhang.cruddemo.data.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,5 +20,11 @@ object RepositoryModule {
     @Provides
     fun provideSearchRepository(api: RepoAPI): SearchRepository {
         return SearchRepositoryImpl(api)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepoDetailRepository(api: RepoAPI): RepoDetailRepository {
+        return RepoDetailRepositoryImpl(api)
     }
 }

@@ -14,6 +14,9 @@ interface RepoAPI {
 
     @GET("/search/repositories")
     suspend fun searchRepo( @Query("q")query: String): Response<SearchResponse>
+
+    @GET("/repos/{full_name}")
+    suspend fun  getRepo(@Path("full_name") fullName: String): Response<ApiRepository>
 }
 
 data class ApiRepository(
@@ -21,6 +24,8 @@ data class ApiRepository(
     val id: Int,
     @Expose
     val name: String,
+    @Expose
+    val full_name: String,
     @Expose
     val description: String?,
     @Expose
