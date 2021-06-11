@@ -1,9 +1,11 @@
 package co.ruizhang.cruddemo.ui.repodetail
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -18,10 +20,10 @@ import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 @Composable
 fun RepoDetail(
     id: Int,
+    back: () -> Unit,
     vm: RepoDetailViewModel = hiltViewModel(),
     modifier: Modifier = Modifier, // leave it for now
 ) {
-    val navController = rememberNavController()
     val repo = vm.repo.observeAsState()
     vm.get(id)
     CrudDemoTheme {
@@ -30,7 +32,7 @@ fun RepoDetail(
                 TopAppBar(
                     title = { Text(text = stringResource(id = R.string.repo_detail)) },
                     navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(onClick = back) {
                             Icon(
                                 Icons.Filled.ArrowBack,
                                 contentDescription = stringResource(id = R.string.content_description_back)

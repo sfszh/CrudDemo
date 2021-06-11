@@ -61,7 +61,7 @@ fun NavGraph(
 
         composable("${REPO_DETAIL_ROUTE}/{${REPO_DETAIL_ID}}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString(REPO_DETAIL_ID)?.toInt() ?: 0
-            RepoDetail(id)
+            RepoDetail(id, back = { navController.popBackStack() })
         }
     }
 }
