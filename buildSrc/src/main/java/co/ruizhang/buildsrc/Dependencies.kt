@@ -34,6 +34,14 @@ object Libs {
         const val gson = "com.squareup.retrofit2:converter-gson:$version"
     }
 
+    object Room {
+        private const val version = "2.3.0"
+        const val runtime = "androidx.room:room-runtime:$version"
+        const val compiler = "androidx.room:room-compiler:$version"
+        const val ktx = "androidx.room:room-ktx:$version"
+        const val testing = "androidx.room:room-testing:$version"
+    }
+
     object JUnit {
         private const val version = "4.13"
         const val junit = "junit:junit:$version"

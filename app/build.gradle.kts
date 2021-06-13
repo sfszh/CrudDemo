@@ -64,6 +64,7 @@ dependencies {
     implementation(Libs.AndroidX.Activity.activityCompose)
     implementation(Libs.AndroidX.ConstraintLayout.constraintLayoutCompose)
 
+    //region compose
     implementation(Libs.AndroidX.Compose.runtime)
     implementation(Libs.AndroidX.Compose.foundation)
     implementation(Libs.AndroidX.Compose.layout)
@@ -75,6 +76,7 @@ dependencies {
     implementation(Libs.AndroidX.Compose.animation)
     implementation(Libs.AndroidX.Compose.iconsExtended)
     implementation(Libs.AndroidX.Compose.tooling)
+    //endregion
 
     implementation(Libs.AndroidX.Lifecycle.LiveDataKtx)
     implementation(Libs.AndroidX.Lifecycle.RunTime)
@@ -86,6 +88,14 @@ dependencies {
     implementation(Libs.Retrofit.retrofit)
     implementation(Libs.Retrofit.gson)
 
+    //region room
+    implementation(Libs.Room.runtime)
+    annotationProcessor(Libs.Room.compiler)
+    kapt(Libs.Room.compiler)
+    implementation(Libs.Room.ktx)
+    //endregion
+
+    //region Test
     androidTestImplementation(Libs.AndroidX.Activity.activityCompose)
     androidTestImplementation(Libs.JUnit.junit)
     androidTestImplementation(Libs.AndroidX.Test.core)
@@ -93,4 +103,6 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.rules)
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation(Libs.AndroidX.Compose.uiTest)
+    androidTestImplementation(Libs.Room.testing)
+    //endregion
 }

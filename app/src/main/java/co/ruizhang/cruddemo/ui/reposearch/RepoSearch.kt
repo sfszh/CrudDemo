@@ -26,7 +26,7 @@ fun RepoSearch(
     back: () -> Unit,
 ) {
 
-    val searchResult = vm.searchResult.observeAsState()
+    val searchResult = vm.searchViewData.observeAsState()
     RepoSearchUI(
         search = { vm.search(it) },
         check = { viewData, isChecked ->

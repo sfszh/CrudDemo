@@ -1,45 +1,26 @@
 package co.ruizhang.cruddemo.data
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 interface ReposRepository {
-    suspend fun getRepos(): List<Repository>
-    suspend fun removeRepos(repo : Repository) : List<Repository>
-    suspend fun addRepos(repo : Repository) : List<Repository>
+    fun getRepos(): Flow<List<Repository>>
+    suspend fun removeRepos(repo : Repository)
+    suspend fun addRepos(repo : Repository)
 }
 
-class ReposRepositoryImpl(private val repoApi: RepoAPI) : ReposRepository {
-
-    private val cache : MutableList<Repository> = mutableListOf()
-    override suspend fun getRepos(): List<Repository>  =
-        withContext(Dispatchers.IO) {
-            cache
-        }
-
-
-
-    override suspend fun removeRepos(repo: Repository): List<Repository> {
-        cache.remove(repo)
-        return cache
+class ReposRepositoryImpl @Inject constructor(private val repoDao: RepoDao) : ReposRepository {
+    override fun getRepos(): Flow<List<Repository>> {
+        return repoDao.getRepos()
     }
 
-    override suspend fun addRepos(repo: Repository): List<Repository> {
-        cache.add(repo)
-        return cache
+    override suspend fun removeRepos(repo: Repository) {
+        repoDao.delete(repo)
+    }
+
+    override suspend fun addRepos(repo: Repository) {
+        repoDao.insertRepo(repo)
     }
 
 
 }
-
-//val apiModel = repoApi.getRepos(username = "octocat").body() ?: emptyList()
-//apiModel.map {
-//    Repository(
-//        id = it.id,
-//        name = it.name,
-//        description =it.description,
-//        url = it.url,
-//        stargazersCount = it.stargazers_count,
-//        forksCount = it.forks_count
-//    )
-//}

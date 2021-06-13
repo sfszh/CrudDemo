@@ -1,11 +1,12 @@
 package co.ruizhang.cruddemo.ui.repodetail
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,15 +14,16 @@ import javax.inject.Inject
 class RepoDetailViewModel @Inject constructor(
     private val reposRepository: ReposRepository
 ) : ViewModel() {
-
-    val repo: MutableLiveData<Repository> by lazy {
-        MutableLiveData<Repository>()
-    }
+    private var id = 0
+    val repo: LiveData<Repository> = reposRepository.getRepos()
+        .map { list ->
+            list.first {
+                it.id == id
+            }
+        }
+        .asLiveData()
 
     fun get(id: Int) {
-        viewModelScope.launch {
-            val detail = reposRepository.getRepos().firstOrNull { it.id == id }
-            detail?.let { repo.setValue(it) }
-        }
+        this.id = id
     }
 }

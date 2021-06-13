@@ -12,8 +12,8 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Singleton
     @Provides
-    fun provideReposRepository(api: RepoAPI): ReposRepository {
-        return ReposRepositoryImpl(repoApi = api)
+    fun provideReposRepository(repoDao: RepoDao): ReposRepository {
+        return ReposRepositoryImpl(repoDao = repoDao)
     }
 
     @Singleton

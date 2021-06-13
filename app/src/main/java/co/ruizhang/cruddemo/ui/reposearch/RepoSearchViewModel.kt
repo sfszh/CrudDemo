@@ -5,8 +5,9 @@ import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,37 +15,42 @@ class RepoSearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
     private val reposRepository: ReposRepository
 ) : ViewModel() {
+    private val searchEvent = MutableLiveData<String>()
 
-    val searchResult: MutableLiveData<List<RepoSearchViewData>> by lazy {
-        MutableLiveData<List<RepoSearchViewData>>()
-    }
-    private var searchCache: List<Repository> = emptyList()
-
-    fun search(query: String) {
-        viewModelScope.launch {
-            try {
-
-
-                searchCache = searchRepository.search(query)
-                val repos = reposRepository.getRepos()
-                val viewData = toViewData(searchCache, repos)
-                searchResult.setValue(viewData)
-            } catch ( e : Exception) {
-                print(e.message)
+    @FlowPreview
+    private val searchResult = searchEvent
+        .asFlow()
+        .flatMapConcat { query ->
+            flow {
+                if (query.isNotEmpty()) {
+                    emit(searchRepository.search(query))
+                }
             }
         }
+
+    @FlowPreview //really...
+    val searchViewData: LiveData<List<RepoSearchViewData>> = searchResult
+        .combine(reposRepository.getRepos()) { searchResult, repos ->
+            toViewData(searchResult, repos)
+        }
+        .asLiveData()
+
+
+    fun search(query: String) {
+        searchEvent.value = query
     }
 
+    @FlowPreview
     fun toggleBookmark(viewData: RepoSearchViewData, isChecked: Boolean) {
         viewModelScope.launch {
-            searchCache.first { it.name == viewData.name }
-            val toggledRepo = searchCache.first { it.id == viewData.id }
-            val savedRepos =
-                if (isChecked) reposRepository.addRepos(toggledRepo) else reposRepository.removeRepos(
-                    toggledRepo
-                )
-            val newViewData = toViewData(searchCache, savedRepos)
-            searchResult.setValue(newViewData)
+            searchResult
+                .onEach { repoList ->
+                    val toggledRepo = repoList.first { it.id == viewData.id }
+                    if (isChecked) reposRepository.addRepos(toggledRepo) else reposRepository.removeRepos(
+                        toggledRepo
+                    )
+                }
+                .collect()
         }
     }
 
