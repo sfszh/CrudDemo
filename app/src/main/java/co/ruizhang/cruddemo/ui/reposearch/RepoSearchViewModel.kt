@@ -5,7 +5,9 @@ import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,11 +17,12 @@ class RepoSearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
     private val reposRepository: ReposRepository
 ) : ViewModel() {
-    private val searchEvent = MutableLiveData<String>()
+    @ExperimentalCoroutinesApi
+    private val searchEvent = MutableSharedFlow<String>(1)
 
+    @ExperimentalCoroutinesApi
     @FlowPreview
     private val searchResult = searchEvent
-        .asFlow()
         .flatMapConcat { query ->
             flow {
                 if (query.isNotEmpty()) {
@@ -28,6 +31,7 @@ class RepoSearchViewModel @Inject constructor(
             }
         }
 
+    @ExperimentalCoroutinesApi
     @FlowPreview //really...
     val searchViewData: LiveData<List<RepoSearchViewData>> = searchResult
         .combine(reposRepository.getRepos()) { searchResult, repos ->
@@ -36,10 +40,14 @@ class RepoSearchViewModel @Inject constructor(
         .asLiveData()
 
 
+    @ExperimentalCoroutinesApi
     fun search(query: String) {
-        searchEvent.value = query
+        viewModelScope.launch {
+            searchEvent.emit(query)
+        }
     }
 
+    @ExperimentalCoroutinesApi
     @FlowPreview
     fun toggleBookmark(viewData: RepoSearchViewData, isChecked: Boolean) {
         viewModelScope.launch {
