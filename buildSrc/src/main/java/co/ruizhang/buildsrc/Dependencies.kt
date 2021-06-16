@@ -86,16 +86,20 @@ object Libs {
 
         object Lifecycle {
             private const val version = "2.3.1"
-            const val RunTime = "androidx.lifecycle:lifecycle-runtime:$version"
-            const val LiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
-            const val Extensions= "androidx.lifecycle:lifecycle-extensions:2.2.0"
-            const val ViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
+            const val runTime = "androidx.lifecycle:lifecycle-runtime:$version"
+            const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
+            const val extensions= "androidx.lifecycle:lifecycle-extensions:2.2.0"
+            const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
 
         }
 
         object ConstraintLayout {
             const val constraintLayoutCompose =
                 "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05"
+        }
+        object DataStore {
+            private const val version =  "1.0.0-beta01"
+            const val preferences = "androidx.datastore:datastore-preferences:$version"
         }
 
         object Test {

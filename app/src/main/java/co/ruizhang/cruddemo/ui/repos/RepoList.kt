@@ -28,10 +28,17 @@ fun Repos(
     vm: RepoListViewModel = hiltViewModel(),
     selectRepo: (Int) -> Unit,
     navigateToRepoSearch: () -> Unit,
+    navigateToSplash: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val repos = vm.repos.observeAsState()
-    ReposUI(modifier, repos, selectRepo, navigateToRepoSearch)
+    vm.hasSplashViewed.observeAsState().value?.let { hasViewed ->
+        if (hasViewed) {
+            val repos = vm.repos.observeAsState()
+            ReposUI(modifier, repos, selectRepo, navigateToRepoSearch)
+        } else {
+            navigateToSplash()
+        }
+    }
 }
 
 @Composable

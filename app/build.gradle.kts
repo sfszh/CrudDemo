@@ -78,10 +78,12 @@ dependencies {
     implementation(Libs.AndroidX.Compose.tooling)
     //endregion
 
-    implementation(Libs.AndroidX.Lifecycle.LiveDataKtx)
-    implementation(Libs.AndroidX.Lifecycle.RunTime)
-    implementation(Libs.AndroidX.Lifecycle.ViewModelKtx)
-    implementation(Libs.AndroidX.Lifecycle.Extensions)
+    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
+    implementation(Libs.AndroidX.Lifecycle.runTime)
+    implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
+    implementation(Libs.AndroidX.Lifecycle.extensions)
+    implementation(Libs.AndroidX.DataStore.preferences)
+
     implementation(Libs.Accompanist.coil)
     implementation(Libs.Accompanist.insets)
 

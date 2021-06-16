@@ -1,4 +1,4 @@
-package co.ruizhang.cruddemo.ui
+package co.ruizhang.cruddemo.ui.onboarding
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -8,32 +8,46 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 
 @Composable
-fun Onboarding(onboardingComplete: () -> Unit) {
+fun Onboarding(
+    vm: OnboardingViewModel = hiltViewModel(),
+    onboardingComplete: () -> Unit
+) {
+
+    vm.finishEvent.observeAsState().value?.let {
+        onboardingComplete()
+    }
+
     CrudDemoTheme {
         Scaffold(
             floatingActionButton = {
-                ConfirmButton(onboardingComplete)
+                ConfirmButton{
+                    vm.markSplashViewed()
+                }
             }
         ) { innerPadding ->
-            Column (
+            Column(
                 Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
                     .wrapContentSize(Alignment.Center)
-                    ){
-                Text(text = stringResource(R.string.useless),
-                textAlign = TextAlign.Center,
-                fontSize = 64.sp)
+            ) {
+                Text(
+                    text = stringResource(R.string.useless),
+                    textAlign = TextAlign.Center,
+                    fontSize = 64.sp
+                )
             }
         }
     }

@@ -10,13 +10,13 @@ import co.ruizhang.cruddemo.MainDestinations.REPOS_ROUTE
 import co.ruizhang.cruddemo.MainDestinations.REPOS_SEARCH
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
-import co.ruizhang.cruddemo.ui.Onboarding
+import co.ruizhang.cruddemo.ui.onboarding.Onboarding
 import co.ruizhang.cruddemo.ui.repodetail.RepoDetail
 import co.ruizhang.cruddemo.ui.Repos
 import co.ruizhang.cruddemo.ui.reposearch.RepoSearch
 
 /**
- * Destinations used in the ([OwlApp]).
+ * Destinations used in the ([CrudDemo]).
  */
 object MainDestinations {
     const val ONBOARDING_ROUTE = "onboarding"
@@ -29,7 +29,7 @@ object MainDestinations {
 @Composable
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = ONBOARDING_ROUTE,
+    startDestination: String = REPOS_ROUTE,
 ) {
     NavHost(
         navController = navController,
@@ -48,6 +48,9 @@ fun NavGraph(
                     navController.navigate(
                         REPOS_SEARCH
                     )
+                },
+                navigateToSplash = {
+                    navController.navigate(ONBOARDING_ROUTE)
                 }
 
             )
