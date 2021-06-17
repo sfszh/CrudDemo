@@ -7,7 +7,6 @@ import co.ruizhang.cruddemo.data.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +18,7 @@ class RepoSearchViewModel @Inject constructor(
 ) : ViewModel() {
     @ExperimentalCoroutinesApi
     private val searchEvent = MutableSharedFlow<String>(1)
+    private var query : String = ""
 
     @ExperimentalCoroutinesApi
     @FlowPreview
@@ -39,9 +39,12 @@ class RepoSearchViewModel @Inject constructor(
         }
         .asLiveData()
 
+    fun setQueryText( query : String) {
+        this.query = query
+    }
 
     @ExperimentalCoroutinesApi
-    fun search(query: String) {
+    fun search() {
         viewModelScope.launch {
             searchEvent.emit(query)
         }

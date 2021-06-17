@@ -1,6 +1,7 @@
 package co.ruizhang.cruddemo
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,10 +15,9 @@ import co.ruizhang.cruddemo.ui.onboarding.Onboarding
 import co.ruizhang.cruddemo.ui.repodetail.RepoDetail
 import co.ruizhang.cruddemo.ui.Repos
 import co.ruizhang.cruddemo.ui.reposearch.RepoSearch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
-/**
- * Destinations used in the ([CrudDemo]).
- */
 object MainDestinations {
     const val ONBOARDING_ROUTE = "onboarding"
     const val REPOS_ROUTE = "repos"
@@ -26,6 +26,9 @@ object MainDestinations {
     const val REPO_DETAIL_ID = "repo_id"
 }
 
+@ExperimentalCoroutinesApi
+@FlowPreview
+@ExperimentalComposeUiApi
 @Composable
 fun NavGraph(
     navController: NavHostController = rememberNavController(),

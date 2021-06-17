@@ -3,6 +3,8 @@ package co.ruizhang.cruddemo.ui.reposearch
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -11,14 +13,23 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.data.MOCK_SEARCH
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalComposeUiApi
+@FlowPreview
+@ExperimentalCoroutinesApi
 @Composable
 fun RepoSearch(
     modifier: Modifier = Modifier,
@@ -28,7 +39,8 @@ fun RepoSearch(
 
     val searchResult = vm.searchViewData.observeAsState()
     RepoSearchUI(
-        search = { vm.search(it) },
+        search = { vm.search() },
+        onQueryChanged = { vm.setQueryText(it) },
         check = { viewData, isChecked ->
             vm.toggleBookmark(viewData, isChecked)
         },
@@ -38,9 +50,11 @@ fun RepoSearch(
     )
 }
 
+@ExperimentalComposeUiApi
 @Composable
 private fun RepoSearchUI(
-    search: (String) -> Unit,
+    search: () -> Unit,
+    onQueryChanged: (String) -> Unit,
     check: (RepoSearchViewData, Boolean) -> Unit,
     searchResult: State<List<RepoSearchViewData>?>,
     back: () -> Unit,
@@ -51,9 +65,10 @@ private fun RepoSearchUI(
             topBar = {
                 TopAppBar(
                     title = {
-                        SearchBar(onSearch = {
-                            search(it)
-                        })
+                        SearchBar(
+                            onSearch = search,
+                            onTextChanged = onQueryChanged
+                        )
                     },
                     navigationIcon = {
                         IconButton(onClick = back) {
@@ -62,12 +77,22 @@ private fun RepoSearchUI(
                                 contentDescription = stringResource(id = R.string.content_description_back)
                             )
                         }
+                    },
+                    actions = {
+                        IconButton(onClick = search) {
+                            Icon(
+                                Icons.Rounded.Search,
+                                contentDescription = stringResource(id = R.string.content_description_search)
+                            )
+                        }
                     }
                 )
             }
         ) { innerPadding ->
-            LazyColumn(modifier) {
-
+            LazyColumn(
+                contentPadding = innerPadding,
+                modifier = modifier.padding(top = 8.dp)
+            ) {
                 searchResult.value?.let {
                     items(it) { viewData ->
                         RepoSearchCard(
@@ -83,37 +108,52 @@ private fun RepoSearchUI(
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun SearchBar(
-    onSearch: (String) -> Unit,
+    onSearch: () -> Unit,
+    onTextChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var text by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier) {
         TextField(
             value = text,
             onValueChange = {
                 text = it
+                onTextChanged(it)
             },
-            label = { Text(text = stringResource(id = R.string.search_label)) },
             leadingIcon = {
-                Icon(
-                    Icons.Rounded.Search,
-                    contentDescription = stringResource(id = R.string.content_description_search)
+                Text(
+                    text = stringResource(id = R.string.search),
+                    color = MaterialTheme.colors.onPrimary
                 )
-            }
+            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = {
+                onSearch()
+                keyboardController?.hide()
+            })
         )
         Button(
             onClick = {
-                onSearch(text)
+                onSearch()
+                keyboardController?.hide()
             },
-            modifier = Modifier.align(CenterVertically)
+            modifier = Modifier
+                .align(CenterVertically)
+                .width(64.dp)
         ) {
-            Text(text = stringResource(id = R.string.search))
+            Text(
+                text = stringResource(id = R.string.search),
+                style = MaterialTheme.typography.button
+            )
         }
-
     }
+
 }
+
 
 @Composable
 fun RepoSearchCard(
@@ -121,16 +161,20 @@ fun RepoSearchCard(
     onChecked: (Boolean) -> Unit,
     modifier: Modifier = Modifier, // leave it for now
 ) {
-    Row(modifier = modifier.width(IntrinsicSize.Max)) {
+    Row(
+        modifier = modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+    ) {
         Column {
             Text(
-                modifier = Modifier.wrapContentWidth(Alignment.Start),
-                text = viewData.name
+                modifier = Modifier,
+                text = viewData.name,
+                style = MaterialTheme.typography.subtitle2
             )
         }
         Checkbox(
             modifier = Modifier
-                .align(CenterVertically)
+                .weight(1.0f)
                 .wrapContentWidth(Alignment.End),
             checked = viewData.isChecked,
             onCheckedChange = onChecked
@@ -139,11 +183,13 @@ fun RepoSearchCard(
 }
 
 //region Previews
+@ExperimentalComposeUiApi
 @Preview("Repo Search Preview")
 @Composable
 fun RepoSearchPreview() {
     RepoSearchUI(
         search = {},
+        onQueryChanged = {},
         check = { _, _ ->
         },
         searchResult = remember { mutableStateOf(MOCK_SEARCH) },
@@ -151,10 +197,11 @@ fun RepoSearchPreview() {
     )
 }
 
+@ExperimentalComposeUiApi
 @Preview("Search Bar Preview")
 @Composable
 fun SearchBarPreview() {
-    SearchBar(onSearch = {})
+    SearchBar(onSearch = {}, onTextChanged = {})
 }
 
 @Preview("Search Card Preview")
