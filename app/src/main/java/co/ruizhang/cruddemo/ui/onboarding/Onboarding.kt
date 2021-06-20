@@ -1,24 +1,29 @@
 package co.ruizhang.cruddemo.ui.onboarding
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @Composable
 fun Onboarding(
     vm: OnboardingViewModel = hiltViewModel(),
@@ -28,29 +33,46 @@ fun Onboarding(
     vm.finishEvent.observeAsState().value?.let {
         onboardingComplete()
     }
+    var stripeState by remember { mutableStateOf(StripeState.Collapsed) }
 
     CrudDemoTheme {
         Scaffold(
             floatingActionButton = {
-                ConfirmButton{
+                ConfirmButton {
                     vm.markSplashViewed()
                 }
             }
-        ) { innerPadding ->
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .wrapContentSize(Alignment.Center)
-            ) {
-                Text(
-                    text = stringResource(R.string.useless),
-                    textAlign = TextAlign.Center,
-                    fontSize = 64.sp
+        ) {
+            Box {
+                CanvasStripeAnimation(
+                    Modifier
+                        .rotate(225f)
+                        .fillMaxSize()
+                        .offset(y = ((-50).dp)), //Fixme magic number and doesn't seem to fit every screen
+                    state = stripeState
                 )
+                stripeState = StripeState.Expanded
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .wrapContentSize(Alignment.Center)
+                ) {
+
+
+                    Text(
+                        text = stringResource(R.string.useless),
+                        textAlign = TextAlign.Center,
+                        fontSize = 64.sp,
+                    )
+
+                }
+
             }
         }
     }
+
 }
 
 @Composable
@@ -62,8 +84,112 @@ fun ConfirmButton(onboardingComplete: () -> Unit) {
     }
 }
 
-@Preview(name = "Onboarding")
-@Composable
-private fun OnboardingPreview() {
-    Onboarding(onboardingComplete = { })
+enum class StripeState {
+    Collapsed,
+    Expanded
 }
+
+data class StripeSpec(
+    val color: Color,
+    val height: Dp
+)
+
+val specsTemplate: List<StripeSpec> = listOf(
+    StripeSpec(
+        Color.Green,
+        400.dp
+    ),
+    StripeSpec(
+        Color.Yellow,
+        500.dp
+    ),
+    StripeSpec(
+        Color.Blue,
+        600.dp
+    ),
+    StripeSpec(
+        Color.Red,
+        700.dp
+    ),
+    StripeSpec(
+        Color.Blue,
+        600.dp
+    ),
+    StripeSpec(
+        Color.Yellow,
+        500.dp
+    ),
+    StripeSpec(
+        Color.Green,
+        400.dp
+    ),
+)
+
+const val STRIPE_STATE_NAME = "StripeState"
+
+
+@Composable
+private fun CanvasStripeAnimation(
+    modifier: Modifier = Modifier,
+    specs: List<StripeSpec> = specsTemplate,
+    state: StripeState
+) {
+
+    val transition = updateTransition(targetState = state, label = STRIPE_STATE_NAME)
+
+    val sizes = specs
+        .map { spec ->
+            val size by transition.animateSize(label = STRIPE_STATE_NAME) { stripeState ->
+                when (stripeState) {
+                    StripeState.Collapsed -> Size(15.dp.value, 0f)
+                    StripeState.Expanded -> Size(15.dp.value, spec.height.value)
+                }
+            }
+            return@map size
+        }
+        .map { size ->
+            val animatedSize: Size by animateSizeAsState(
+                targetValue = size,
+                // Configure the animation duration and easing.
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
+            return@map animatedSize
+        }
+
+    Canvas(
+        modifier = modifier
+    ) {
+        val canvasQuadrantSize = size / 20F
+
+        specs.forEachIndexed { index, stripeSpec ->
+            drawRect(
+                color = stripeSpec.color,
+                topLeft = Offset(index * canvasQuadrantSize.width, 0f),
+                size = sizes[index]
+            )
+        }
+    }
+}
+
+
+@Preview(name = "Stripe Animation Preview")
+@Composable
+private fun StripeAnimationPreview() {
+
+    CrudDemoTheme {
+        Scaffold{
+            val stripeState by remember { mutableStateOf(StripeState.Expanded) }
+            CanvasStripeAnimation(
+                modifier = Modifier
+                    .rotate(225f)
+                    .fillMaxSize()
+                    .offset(y = ((-0).dp)),
+                state = stripeState
+            )
+        }
+    }
+}
+
