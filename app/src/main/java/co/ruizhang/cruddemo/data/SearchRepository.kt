@@ -3,7 +3,7 @@ package co.ruizhang.cruddemo.data
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface SearchRepository {
+interface   SearchRepository {
     suspend fun search(query: String): List<Repository>
 }
 

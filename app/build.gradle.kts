@@ -98,8 +98,14 @@ dependencies {
     //endregion
 
     //region Test
+    testImplementation(Libs.JUnit.junit)
+    testImplementation(Libs.MockK.mockk)
+    testImplementation(Libs.Coroutines.test)
+    testImplementation(Libs.Hilt.test)
+    kaptTest(Libs.Hilt.test)
+    testImplementation(Libs.Arch.testing)
+
     androidTestImplementation(Libs.AndroidX.Activity.activityCompose)
-    androidTestImplementation(Libs.JUnit.junit)
     androidTestImplementation(Libs.AndroidX.Test.core)
     androidTestImplementation(Libs.AndroidX.Test.espressoCore)
     androidTestImplementation(Libs.AndroidX.Test.rules)

@@ -22,8 +22,7 @@ class DataStoreManager  @Inject constructor(@ApplicationContext appContext: Cont
     }
 
     val hasSplashViewed: Flow<Boolean> = userPreferencesDataStore.data.map { preferences ->
-//        preferences[splashHasViewedKey] ?: false
-        false
+        preferences[splashHasViewedKey] ?: false
     }
 
     companion object {

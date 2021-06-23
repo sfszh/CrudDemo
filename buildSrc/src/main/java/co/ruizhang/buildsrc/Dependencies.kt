@@ -14,6 +14,11 @@ object Libs {
         const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
 
+    object Arch {
+        private const val version = "1.1.1"
+        const val testing = "android.arch.core:core-testing:$version"
+    }
+
     object Kotlin {
         private const val version = "1.4.32"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
@@ -47,6 +52,15 @@ object Libs {
         const val junit = "junit:junit:$version"
     }
 
+    object Mockito {
+        const val core = "org.mockito:mockito-core:1.10.19"
+        const val kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
+    }
+
+    object MockK {
+        const val mockk = "io.mockk:mockk:1.11.0"
+    }
+
     object Hilt {
         private const val version = "2.36"
         private const val miscVersion = "1.0.0-alpha03"
@@ -55,6 +69,7 @@ object Libs {
         const val androidCompiler = "com.google.dagger:hilt-android-compiler:$version"
         const val viewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$miscVersion"
         const val compiler = "androidx.hilt:hilt-compiler:$miscVersion"
+        const val test = "com.google.dagger:hilt-android-testing:$version"
         const val composeNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha02"
     }
 
@@ -111,6 +126,7 @@ object Libs {
                 private const val version = "1.1.2"
                 const val junit = "androidx.test.ext:junit-ktx:$version"
             }
+
 
             const val espressoCore = "androidx.test.espresso:espresso-core:3.3.0"
         }
