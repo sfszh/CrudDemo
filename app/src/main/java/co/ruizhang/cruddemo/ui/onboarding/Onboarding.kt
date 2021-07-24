@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,18 +20,26 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @Composable
 fun Onboarding(
     vm: OnboardingViewModel = hiltViewModel(),
     onboardingComplete: () -> Unit
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewDataFlowLifecycleAware = remember(vm.finishEvent, lifecycleOwner) {
+        vm.finishEvent.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
 
-    vm.finishEvent.observeAsState().value?.let {
+    val finished = viewDataFlowLifecycleAware.collectAsState(null)
+
+
+    if (finished.value?.isFinished == true) {
         onboardingComplete()
     }
     var stripeState by remember { mutableStateOf(StripeState.Collapsed) }
@@ -180,7 +189,7 @@ private fun CanvasStripeAnimation(
 private fun StripeAnimationPreview() {
 
     CrudDemoTheme {
-        Scaffold{
+        Scaffold {
             val stripeState by remember { mutableStateOf(StripeState.Expanded) }
             CanvasStripeAnimation(
                 modifier = Modifier

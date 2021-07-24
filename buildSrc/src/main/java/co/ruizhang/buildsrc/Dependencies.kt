@@ -56,11 +56,6 @@ object Libs {
         const val junit = "junit:junit:$version"
     }
 
-    object Mockito {
-        const val core = "org.mockito:mockito-core:1.10.19"
-        const val kotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
-    }
-
     object MockK {
         const val mockk = "io.mockk:mockk:1.11.0"
     }
