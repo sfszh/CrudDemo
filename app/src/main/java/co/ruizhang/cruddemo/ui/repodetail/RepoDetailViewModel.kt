@@ -1,12 +1,15 @@
 package co.ruizhang.cruddemo.ui.repodetail
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
+import co.ruizhang.cruddemo.ui.STOP_TIME_OUT_MILLS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,13 +17,18 @@ class RepoDetailViewModel @Inject constructor(
     reposRepository: ReposRepository
 ) : ViewModel() {
     private var id = 0
-    val repo: LiveData<Repository> = reposRepository.getRepos()
+    val repo: StateFlow<Repository?> = reposRepository.getRepos()
         .map { list ->
             list.first {
                 it.id == id
             }
         }
-        .asLiveData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
+            initialValue = null
+        )
+
 
     fun get(id: Int) {
         this.id = id

@@ -5,7 +5,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -24,7 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
 fun Onboarding(

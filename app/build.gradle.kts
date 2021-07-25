@@ -71,14 +71,12 @@ dependencies {
     implementation(Libs.AndroidX.Compose.ui)
     implementation(Libs.AndroidX.Compose.uiUtil)
     implementation(Libs.AndroidX.Compose.viewModel)
-    implementation(Libs.AndroidX.Compose.liveData)
     implementation(Libs.AndroidX.Compose.material)
     implementation(Libs.AndroidX.Compose.animation)
     implementation(Libs.AndroidX.Compose.iconsExtended)
     implementation(Libs.AndroidX.Compose.tooling)
     //endregion
 
-    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
     implementation(Libs.AndroidX.Lifecycle.runTime)
     implementation(Libs.AndroidX.Lifecycle.runTimeKtx)
     implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
