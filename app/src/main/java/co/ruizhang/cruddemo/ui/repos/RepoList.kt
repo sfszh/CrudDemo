@@ -5,16 +5,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.data.MOCK_REPOS
 import co.ruizhang.cruddemo.data.Repository
@@ -29,9 +29,17 @@ fun Repos(
     navigateToRepoSearch: () -> Unit,
     navigateToSplash: () -> Unit
 ) {
-    vm.hasSplashViewed.observeAsState().value?.let { hasViewed ->
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewDataFlowLifecycleAware = remember(vm.uiState, lifecycleOwner) {
+        vm.uiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+
+    val uiState = viewDataFlowLifecycleAware.collectAsState(null)
+    val hasSplashViewed = uiState.value?.hasSplashViewed
+    val repos = uiState.value?.repos ?: emptyList()
+
+    hasSplashViewed?.let { hasViewed ->
         if (hasViewed) {
-            val repos = vm.repos.observeAsState()
             ReposUI(modifier, repos, selectRepo, navigateToRepoSearch)
         } else {
             navigateToSplash()
@@ -42,7 +50,7 @@ fun Repos(
 @Composable
 private fun ReposUI(
     modifier: Modifier = Modifier,
-    repos: State<List<Repository>?>,
+    repos: List<Repository>,
     selectRepo: (Int) -> Unit,
     navigateToRepoSearch: () -> Unit
 ) {
@@ -66,14 +74,12 @@ private fun ReposUI(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = modifier
             ) {
-                repos.value?.let {
-                    items(it) { repo ->
-                        RepoCard(
-                            repo = repo,
-                            onClick = { selectRepo(repo.id) },
-                            modifier = modifier
-                        )
-                    }
+                items(repos) { repo ->
+                    RepoCard(
+                        repo = repo,
+                        onClick = { selectRepo(repo.id) },
+                        modifier = modifier
+                    )
                 }
             }
         }
@@ -117,7 +123,7 @@ fun AddRepoButton(add: () -> Unit) {
 @Composable
 fun ReposPreview() {
     ReposUI(
-        repos = remember { mutableStateOf(MOCK_REPOS) },
+        repos = MOCK_REPOS,
         selectRepo = {},
         navigateToRepoSearch = {})
 }

@@ -3,6 +3,7 @@ package co.ruizhang.cruddemo.ui.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.ruizhang.cruddemo.DataStoreManager
+import co.ruizhang.cruddemo.ui.STOP_TIME_OUT_MILLS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class OnboardingViewModel @Inject constructor(private val dataStoreManager: Data
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000), //https://medium.com/androiddevelopers/things-to-know-about-flows-sharein-and-statein-operators-20e6ccb2bc74
+            started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
             initialValue = OnBoardingUIState(false)
         )
 
