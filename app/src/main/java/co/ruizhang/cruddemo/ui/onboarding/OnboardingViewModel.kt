@@ -14,14 +14,14 @@ class OnboardingViewModel @Inject constructor(private val dataStoreManager: Data
     ViewModel() {
     private val _finishEvent = MutableSharedFlow<Unit>(0)
 
-    val finishEvent: StateFlow<OnBoardingUIState> = _finishEvent
+    val finishEvent: StateFlow<OnBoardingViewData> = _finishEvent
         .map {
-            OnBoardingUIState(true)
+            OnBoardingViewData(true)
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
-            initialValue = OnBoardingUIState(false)
+            initialValue = OnBoardingViewData(false)
         )
 
 
@@ -32,7 +32,7 @@ class OnboardingViewModel @Inject constructor(private val dataStoreManager: Data
         }
     }
 
-    data class OnBoardingUIState(
+    data class OnBoardingViewData(
         val isFinished: Boolean
     )
 }

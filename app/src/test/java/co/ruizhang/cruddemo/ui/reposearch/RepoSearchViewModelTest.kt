@@ -6,22 +6,20 @@ import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
 import co.ruizhang.cruddemo.util.MainCoroutineRule
-import co.ruizhang.cruddemo.util.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
+//todo use mockwebserver or equivalent
 class RepoSearchViewModelTest {
-
-
-
     @ExperimentalCoroutinesApi
     @get:Rule
     var coroutinesTestRule = MainCoroutineRule()
@@ -47,7 +45,7 @@ class RepoSearchViewModelTest {
         val searchViewModel = RepoSearchViewModel(searchRepoMock, reposRepoMock)
         searchViewModel.setQueryText("foobar")
         searchViewModel.search()
-        val result = searchViewModel.searchViewData.getOrAwaitValue()
+        val result = searchViewModel.viewData.first()
         assertEquals(result.size, 0)
     }
 
@@ -64,7 +62,7 @@ class RepoSearchViewModelTest {
         val searchViewModel = RepoSearchViewModel(searchRepoMock, reposRepoMock)
         searchViewModel.setQueryText("foobar")
         searchViewModel.search()
-        val result = searchViewModel.searchViewData.getOrAwaitValue()
+        val result = searchViewModel.viewData.first()
         assertEquals(result.size, 1)
     }
 }

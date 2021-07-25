@@ -10,17 +10,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.data.MOCK_SEARCH
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
@@ -36,8 +38,12 @@ fun RepoSearch(
     vm: RepoSearchViewModel = hiltViewModel(),
     back: () -> Unit,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val viewDataFlowLifecycleAware = remember(vm.viewData, lifecycleOwner) {
+        vm.viewData.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
 
-    val searchResult = vm.searchViewData.observeAsState()
+    val searchResult = viewDataFlowLifecycleAware.collectAsState(null)
     RepoSearchUI(
         search = { vm.search() },
         onQueryChanged = { vm.setQueryText(it) },

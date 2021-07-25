@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
+import co.ruizhang.cruddemo.ui.STOP_TIME_OUT_MILLS
+import co.ruizhang.cruddemo.ui.repos.RepoListViewData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -16,14 +18,14 @@ class RepoSearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
     private val reposRepository: ReposRepository
 ) : ViewModel() {
-    @ExperimentalCoroutinesApi
-    private val searchEvent = MutableSharedFlow<String>(1)
-    private var query : String = ""
 
-    @ExperimentalCoroutinesApi
+    private val searchEvent = MutableSharedFlow<String>(1)
+    private var query: String = ""
+
+
     @FlowPreview
     private val searchResult = searchEvent
-        .flatMapConcat { query ->
+        .flatMapConcat { query -> //todo find a more proper operator
             flow {
                 if (query.isNotEmpty()) {
                     emit(searchRepository.search(query))
@@ -31,26 +33,28 @@ class RepoSearchViewModel @Inject constructor(
             }
         }
 
-    @ExperimentalCoroutinesApi
     @FlowPreview //really...
-    val searchViewData: LiveData<List<RepoSearchViewData>> = searchResult
+    val viewData: StateFlow<List<RepoSearchViewData>> = searchResult
         .combine(reposRepository.getRepos()) { searchResult, repos ->
             toViewData(searchResult, repos)
         }
-        .asLiveData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
+            initialValue = emptyList()
+        )
 
-    fun setQueryText( query : String) {
+    fun setQueryText(query: String) {
         this.query = query
     }
 
-    @ExperimentalCoroutinesApi
+
     fun search() {
         viewModelScope.launch {
             searchEvent.emit(query)
         }
     }
 
-    @ExperimentalCoroutinesApi
     @FlowPreview
     fun toggleBookmark(viewData: RepoSearchViewData, isChecked: Boolean) {
         viewModelScope.launch {
@@ -68,11 +72,13 @@ class RepoSearchViewModel @Inject constructor(
     private fun toViewData(
         results: List<Repository>,
         repos: List<Repository>
-    ) = results.map { result ->
-        val id = result.id
-        val name = result.name
-        val isChecked = repos.map { it.id }.contains(result.id)
-        RepoSearchViewData(id, name, isChecked)
+    ): List<RepoSearchViewData> {
+        return results.map { result ->
+            val id = result.id
+            val name = result.name
+            val isChecked = repos.map { it.id }.contains(result.id)
+            RepoSearchViewData(id, name, isChecked)
+        }
     }
 }
 

@@ -15,29 +15,19 @@ class RepoListViewModel @Inject constructor(
     reposRepository: ReposRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
-    val repos: StateFlow<List<Repository>> = reposRepository.getRepos()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
-            initialValue = emptyList()
-        )
-
-
-    val hasSplashViewed: Flow<Boolean> = dataStoreManager.hasSplashViewed
-
-    val uiState: StateFlow<RepoListUIState> =
+    val viewData: StateFlow<RepoListViewData> =
         dataStoreManager.hasSplashViewed
             .combine(reposRepository.getRepos()) { hasSplashViewed, repos ->
-                RepoListUIState(hasSplashViewed, repos)
+                RepoListViewData(hasSplashViewed, repos)
             }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(STOP_TIME_OUT_MILLS),
-                initialValue = RepoListUIState(null, emptyList())
+                initialValue = RepoListViewData(null, emptyList())
             )
 }
 
-data class RepoListUIState(
+data class RepoListViewData(
     val hasSplashViewed: Boolean?,
     val repos: List<Repository>
 )

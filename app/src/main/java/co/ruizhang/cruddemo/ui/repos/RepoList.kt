@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -30,8 +29,8 @@ fun Repos(
     navigateToSplash: () -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val viewDataFlowLifecycleAware = remember(vm.uiState, lifecycleOwner) {
-        vm.uiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    val viewDataFlowLifecycleAware = remember(vm.viewData, lifecycleOwner) {
+        vm.viewData.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
     }
 
     val uiState = viewDataFlowLifecycleAware.collectAsState(null)
