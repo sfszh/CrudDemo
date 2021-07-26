@@ -64,21 +64,18 @@ object Libs {
         const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1"
     }
 
-    object Hilt {
-        private const val version = "2.37"
-        private const val miscVersion = "1.0.0-alpha03"
-        const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
-        const val hilt = "com.google.dagger:hilt-android:$version"
-        const val androidCompiler = "com.google.dagger:hilt-android-compiler:$version"
-        const val viewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$miscVersion"
-        const val compiler = "androidx.hilt:hilt-compiler:$miscVersion"
-        const val test = "com.google.dagger:hilt-android-testing:$version"
-        const val composeNavigation = "androidx.hilt:hilt-navigation-compose:1.0.0-alpha02"
-    }
-
     object Napier {
         private const val version = "1.5.0"
         const val napier = "io.github.aakira:napier:$version"
+    }
+
+    object Koin {
+        private const val koin_version = "3.1.2"
+        const val core = "io.insert-koin:koin-core:$koin_version"
+        const val test = "io.insert-koin:koin-test:$koin_version"
+        const val junit4 = "io.insert-koin:koin-test-junit4:$koin_version"
+        const val android = "io.insert-koin:koin-android:$koin_version"
+        const val compose = "io.insert-koin:koin-androidx-compose:$koin_version"
     }
 
     object AndroidX {

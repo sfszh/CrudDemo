@@ -10,17 +10,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
+import org.koin.androidx.compose.get
+
 
 @Composable
 fun RepoDetail(
     id: Int,
     back: () -> Unit,
-    vm: RepoDetailViewModel = hiltViewModel(),
+    vm: RepoDetailViewModel = get(),
     modifier: Modifier = Modifier, // leave it for now
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

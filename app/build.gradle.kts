@@ -4,7 +4,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -53,11 +52,10 @@ dependencies {
     implementation(Libs.Kotlin.stdlib)
     implementation(Libs.Coroutines.android)
 
-    implementation(Libs.Hilt.hilt)
-    kapt(Libs.Hilt.androidCompiler)
-    kapt(Libs.Hilt.compiler)
-    implementation(Libs.Hilt.viewModel)
-    implementation(Libs.Hilt.composeNavigation)
+    implementation(Libs.Koin.core)
+    implementation(Libs.Koin.android)
+    implementation(Libs.Koin.compose)
+
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.navigation)
@@ -100,9 +98,9 @@ dependencies {
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.MockK.mockk)
     testImplementation(Libs.Coroutines.test)
-    testImplementation(Libs.Hilt.test)
-    kaptTest(Libs.Hilt.test)
     testImplementation(Libs.Arch.testing)
+    testImplementation(Libs.Koin.test)
+    testImplementation(Libs.Koin.junit4)
 
     androidTestImplementation(Libs.AndroidX.Activity.activityCompose)
     androidTestImplementation(Libs.AndroidX.Test.core)

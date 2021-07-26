@@ -18,15 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
+import org.koin.androidx.compose.get
 
 @Composable
 fun Onboarding(
-    vm: OnboardingViewModel = hiltViewModel(),
+    vm: OnboardingViewModel = get(),
     onboardingComplete: () -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

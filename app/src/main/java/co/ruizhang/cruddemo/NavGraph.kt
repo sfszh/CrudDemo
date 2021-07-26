@@ -13,7 +13,7 @@ import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ID
 import co.ruizhang.cruddemo.MainDestinations.REPO_DETAIL_ROUTE
 import co.ruizhang.cruddemo.ui.onboarding.Onboarding
 import co.ruizhang.cruddemo.ui.repodetail.RepoDetail
-import co.ruizhang.cruddemo.ui.Repos
+import co.ruizhang.cruddemo.ui.repos.Repos
 import co.ruizhang.cruddemo.ui.reposearch.RepoSearch
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview

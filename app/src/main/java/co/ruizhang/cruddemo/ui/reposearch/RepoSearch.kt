@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import co.ruizhang.cruddemo.R
@@ -28,6 +27,7 @@ import co.ruizhang.cruddemo.data.MOCK_SEARCH
 import co.ruizhang.cruddemo.ui.theme.CrudDemoTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import org.koin.androidx.compose.get
 
 @ExperimentalComposeUiApi
 @FlowPreview
@@ -35,7 +35,7 @@ import kotlinx.coroutines.FlowPreview
 @Composable
 fun RepoSearch(
     modifier: Modifier = Modifier,
-    vm: RepoSearchViewModel = hiltViewModel(),
+    vm: RepoSearchViewModel = get(),
     back: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

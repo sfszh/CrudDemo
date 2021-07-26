@@ -1,20 +1,16 @@
 package co.ruizhang.cruddemo.ui.reposearch
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import co.ruizhang.cruddemo.data.ReposRepository
 import co.ruizhang.cruddemo.data.Repository
 import co.ruizhang.cruddemo.data.SearchRepository
 import co.ruizhang.cruddemo.ui.STOP_TIME_OUT_MILLS
-import co.ruizhang.cruddemo.ui.repos.RepoListViewData
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class RepoSearchViewModel @Inject constructor(
+class RepoSearchViewModel constructor(
     private val searchRepository: SearchRepository,
     private val reposRepository: ReposRepository
 ) : ViewModel() {

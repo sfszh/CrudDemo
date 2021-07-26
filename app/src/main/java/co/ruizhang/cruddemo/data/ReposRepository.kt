@@ -1,7 +1,6 @@
 package co.ruizhang.cruddemo.data
 
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
 interface ReposRepository {
     fun getRepos(): Flow<List<Repository>>
@@ -9,7 +8,7 @@ interface ReposRepository {
     suspend fun addRepos(repo : Repository)
 }
 
-class ReposRepositoryImpl @Inject constructor(private val repoDao: RepoDao) : ReposRepository {
+class ReposRepositoryImpl constructor(private val repoDao: RepoDao) : ReposRepository {
     override fun getRepos(): Flow<List<Repository>> {
         return repoDao.getRepos()
     }
