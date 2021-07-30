@@ -7,11 +7,11 @@ interface   SearchRepository {
     suspend fun search(query: String): List<Repository>
 }
 
-class SearchRepositoryImpl(private val repoApi: RepoAPI) : SearchRepository {
+class SearchRepositoryImpl(private val repoApi: RepoApi) : SearchRepository {
     override suspend fun search(query: String): List<Repository> {
         return withContext(Dispatchers.IO) {
             repoApi.searchRepo(query).let { resp ->
-                resp.body()?.items?.map {
+                resp.items.map {
                     Repository(
                         id = it.id,
                         name = it.name,
@@ -21,7 +21,7 @@ class SearchRepositoryImpl(private val repoApi: RepoAPI) : SearchRepository {
                         stargazersCount = it.stargazers_count,
                         forksCount = it.forks_count
                     )
-                } ?: emptyList()
+                }
             }
         }
     }

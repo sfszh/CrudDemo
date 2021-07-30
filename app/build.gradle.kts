@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     kotlin("kapt")
+    kotlin("plugin.serialization") version "1.5.10"
 }
 
 android {
@@ -84,8 +85,16 @@ dependencies {
     implementation(Libs.Accompanist.coil)
     implementation(Libs.Accompanist.insets)
 
-    implementation(Libs.Retrofit.retrofit)
-    implementation(Libs.Retrofit.gson)
+
+    implementation(Libs.Kotlinx.serializationCore)
+
+    with(Libs.Ktor) {
+        implementation(clientCore)
+        implementation(clientAndroid)
+        implementation(clientJson)
+        implementation(clientLogging)
+        implementation(clientSerialization)
+    }
 
     //region room
     implementation(Libs.Room.runtime)

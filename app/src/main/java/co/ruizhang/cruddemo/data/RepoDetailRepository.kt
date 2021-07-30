@@ -7,11 +7,11 @@ interface RepoDetailRepository {
     suspend fun get(fullName: String): Repository?
 }
 
-class RepoDetailRepositoryImpl(private val repoApi: RepoAPI) : RepoDetailRepository {
+class RepoDetailRepositoryImpl(private val repoApi: RepoApi) : RepoDetailRepository {
     override suspend fun get(fullName: String): Repository? {
         return withContext(Dispatchers.IO) {
             repoApi.getRepo(fullName).let { resp ->
-                resp.body()?.let {
+                resp.let {
                     Repository(
                         id = it.id,
                         name = it.name,

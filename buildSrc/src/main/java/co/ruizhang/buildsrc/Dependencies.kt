@@ -22,7 +22,7 @@ object Libs {
     }
 
     object Kotlin {
-        private const val version = "1.5.10"
+        const val version = "1.5.10"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:$version"
@@ -35,13 +35,21 @@ object Libs {
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
-    object Retrofit {
-        private const val version = "2.9.0"
-        const val retrofit = "com.squareup.retrofit2:retrofit:$version"
-        const val gson = "com.squareup.retrofit2:converter-gson:$version"
-        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.9.1"
-
+    object Ktor {
+        private const val version = "1.6.1"
+        const val serialization = "io.ktor:ktor-serialization:${version}"
+        const val websockets = "io.ktor:ktor-websockets:${version}"
+        const val clientCore = "io.ktor:ktor-client-core:${version}"
+        const val clientJson = "io.ktor:ktor-client-json:${version}"
+        const val clientLogging = "io.ktor:ktor-client-logging:${version}"
+        const val clientSerialization = "io.ktor:ktor-client-serialization:${version}"
+        const val clientAndroid = "io.ktor:ktor-client-android:${version}"
+        const val clientApache = "io.ktor:ktor-client-apache:${version}"
+        const val clientIos = "io.ktor:ktor-client-ios:${version}"
+        const val clientCio = "io.ktor:ktor-client-cio:${version}"
+        const val clientJs = "io.ktor:ktor-client-js:${version}"
     }
+
 
     object Room {
         private const val version = "2.3.0"
@@ -62,6 +70,8 @@ object Libs {
 
     object Kotlinx {
         const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1"
+        const val serializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.2.1"
+
     }
 
     object Napier {
@@ -88,7 +98,7 @@ object Libs {
 
         object Compose {
             const val snapshot = ""
-            const val version = "1.0.0-beta09"
+            const val version = "1.0.0"
 
             const val animation = "androidx.compose.animation:animation:$version"
             const val foundation = "androidx.compose.foundation:foundation:$version"
