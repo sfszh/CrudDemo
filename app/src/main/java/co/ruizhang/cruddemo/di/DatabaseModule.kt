@@ -1,24 +1,27 @@
 package co.ruizhang.cruddemo.di
 
 import android.content.Context
-import androidx.room.Room
-import co.ruizhang.cruddemo.data.AppDatabase
-import co.ruizhang.cruddemo.data.RepoDao
+import co.ruizhang.cruddemo.CrudDemoQueries
+import co.ruizhang.cruddemo.Database
+import co.ruizhang.cruddemo.data.ReposDatabase
+import co.ruizhang.cruddemo.data.ReposDatabaseImpl
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import org.koin.dsl.module
 
 val databaseModule = module {
-    single { provideAppDatabase(get()) }
-    single { provideRepoDao(get()) }
+    single { provideAndroidSqlDriver(get()) }
+    single { provideQueries(get()) }
+    single<ReposDatabase> { ReposDatabaseImpl(get()) }
 }
 
-fun provideRepoDao(appDatabase: AppDatabase): RepoDao {
-    return appDatabase.repoDao()
+fun provideAndroidSqlDriver(appContext: Context): AndroidSqliteDriver {
+    return AndroidSqliteDriver(
+        schema = Database.Schema,
+        context = appContext,
+        name = "items.db"
+    )
 }
 
-private fun provideAppDatabase(appContext: Context): AppDatabase {
-    return Room.databaseBuilder(
-        appContext,
-        AppDatabase::class.java,
-        "AppDatabase"
-    ).build()
+fun provideQueries(androidSqliteDriver: AndroidSqliteDriver): CrudDemoQueries {
+    return Database(androidSqliteDriver).crudDemoQueries
 }

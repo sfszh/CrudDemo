@@ -8,18 +8,16 @@ interface ReposRepository {
     suspend fun addRepos(repo : Repository)
 }
 
-class ReposRepositoryImpl constructor(private val repoDao: RepoDao) : ReposRepository {
+class ReposRepositoryImpl constructor(private val db: ReposDatabase) : ReposRepository {
     override fun getRepos(): Flow<List<Repository>> {
-        return repoDao.getRepos()
+        return db.getRepos()
     }
 
     override suspend fun removeRepos(repo: Repository) {
-        repoDao.delete(repo)
+        db.delete(repo)
     }
 
     override suspend fun addRepos(repo: Repository) {
-        repoDao.insertRepo(repo)
+        db.insertRepo(repo)
     }
-
-
 }

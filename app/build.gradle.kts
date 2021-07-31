@@ -5,6 +5,8 @@ plugins {
     id("kotlin-android")
     kotlin("kapt")
     kotlin("plugin.serialization") version "1.5.10"
+    id("com.squareup.sqldelight")
+
 }
 
 android {
@@ -96,12 +98,10 @@ dependencies {
         implementation(clientSerialization)
     }
 
-    //region room
-    implementation(Libs.Room.runtime)
-    annotationProcessor(Libs.Room.compiler)
-    kapt(Libs.Room.compiler)
-    implementation(Libs.Room.ktx)
-    //endregion
+    with(Libs.SqlDelight) {
+        implementation(androidDriver)
+        implementation(extensions)
+    }
 
     //region Test
     testImplementation(Libs.JUnit.junit)
@@ -110,6 +110,7 @@ dependencies {
     testImplementation(Libs.Arch.testing)
     testImplementation(Libs.Koin.test)
     testImplementation(Libs.Koin.junit4)
+    testImplementation(Libs.SqlDelight.sqliteDriver)
 
     androidTestImplementation(Libs.AndroidX.Activity.activityCompose)
     androidTestImplementation(Libs.AndroidX.Test.core)
@@ -117,6 +118,5 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.rules)
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation(Libs.AndroidX.Compose.uiTest)
-    androidTestImplementation(Libs.Room.testing)
     //endregion
 }

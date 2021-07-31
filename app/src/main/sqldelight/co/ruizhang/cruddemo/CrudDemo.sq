@@ -1,0 +1,20 @@
+
+CREATE TABLE repo_table(
+id INTEGER NOT NULL PRIMARY KEY,
+name TEXT NOT NULL,
+fullName TEXT NOT NULL,
+description TEXT,
+url TEXT NOT NULL,
+stargazersCount INTEGER NOT NULL,
+forksCount INTEGER NOT NULL
+);
+
+selectAll:
+SELECT * FROM repo_table;
+
+insertRepo:
+INSERT OR REPLACE INTO repo_table(id, name, fullName, description, url, stargazersCount,forksCount)
+VALUES(?,?,?,?,?,?,?);
+
+deleteById:
+DELETE FROM repo_table WHERE id = ?;
